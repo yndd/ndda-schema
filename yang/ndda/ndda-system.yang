@@ -1,0 +1,39 @@
+module ndda-system {
+  yang-version 1.1;
+  namespace "urn:ndda/system";
+  prefix ndda-system;
+
+	// import
+	import ndda-system-platform {
+    prefix ndda-sys-platf;
+  }
+
+	// contact
+	organization "NDD";
+
+  contact
+    "NDD Support Web: <http://www.yndd.com>";
+
+	// description
+  description
+    "Model that describes a topology";
+
+  revision 2022-01-01 {
+    description
+      "ndda 0.1.1";
+		reference "<http://www.yndd.com>";
+  }
+	grouping system-top {
+		description
+		  "Top-level grouping system";
+
+		container system {
+			description
+		  	"Top-level container system";
+
+			uses ndda-sys-platf:platform-top;
+		}
+	}
+
+	uses system-top;
+}

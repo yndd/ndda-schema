@@ -1,0 +1,127 @@
+module ndda-network-instance {
+  yang-version 1.1;
+  namespace "urn:ndda/network-instance";
+  prefix ndda-ni;
+
+	// import
+	import ndda-common {
+    prefix ndda-common;
+  }
+
+  // contact
+	organization "NDD";
+
+  contact
+    "NDD Support Web: <http://www.yndd.com>";
+
+	// description
+  description
+    "Model that describes a interface";
+
+  revision 2022-01-01 {
+    description
+      "ndda 0.1.1";
+    reference "<http://www.yndd.com>";
+  }
+
+  grouping ni-top {
+		description
+		  "Top-level grouping network-instance";
+
+		container network-instance {
+			description
+		  	"Top-level container network-instance";
+
+			container config {
+      	description
+        	"Configuration data ";
+
+      	uses ni-config;
+    	}
+
+    	container state {
+				config false;
+
+      	description
+        	"Operational state data ";
+
+      	uses ni-config;
+      	uses ni-state;
+    	}
+		}
+	}
+
+	grouping ni-config {
+		description
+		  "Grouping for network-instance config";
+		
+		leaf name {
+        type ndda-common:name;
+        description
+        	"The name of the network-instance";
+    }
+
+    leaf kind {
+      type ndda-common:ni-kind;
+      description
+        "The kind of the network-instance";
+    }
+
+    leaf index {
+      type uint32;
+      description
+        "The index of the network-isnatnce";
+    }
+
+    leaf router-id {
+      type ndda-common:ip-address;
+      description
+        "The router-id of the network-isnatnce";
+    }
+
+    list interface {
+      key "name";
+      description
+        "the list ofinterfaces attached to the network-instnce";
+
+      leaf name {
+        type string;
+        description
+          "the name of the interface attached to the network-instance";
+      }
+    }
+	}
+
+	grouping ni-state {
+		description
+		  "Grouping for network-instance state";
+		
+		leaf status {
+			type ndda-common:oper-state;
+			description
+				"The status of the ip resource";
+		}
+
+		leaf reason {
+			type string;
+			description
+				"The reason why a resource is in a certain status";
+		}
+
+		container statistics {
+			description
+		  	"Top-level container platform statistics";
+
+			uses ni-statistics;
+		}
+	}
+
+	grouping ni-statistics {
+		description
+		  "Grouping for ni statistics";
+
+	}
+
+	uses ni-top;
+
+}

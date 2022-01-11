@@ -1,0 +1,188 @@
+module ndda-if-si-addressinfo {
+  yang-version 1.1;
+  namespace "urn:ndda/interface/subinterface/addressinfo";
+  prefix ndda-if-si-ai;
+
+	// import
+	import ndda-common {
+    prefix ndda-common;
+  }
+
+  // contact
+  organization "NDD";
+
+  contact
+    "NDD Support Web: <http://www.yndd.com>";
+
+	// description
+  description
+    "Model that describes the addressinfo";
+
+  revision 2022-01-01 {
+    description
+      "ndda 0.1.1";
+    reference "<http://www.yndd.com>";
+  }
+
+  grouping ipv4-top {
+		description
+		  "Top-level grouping ipv4 address info";
+
+    list ipv4 {
+      key "ip-prefix";
+			max-elements 64;
+      description
+        "The list of  IPv4 addresses assigned to the subinterface.";
+
+      leaf ip-prefix {
+        type leafref {
+          path "../config/ip-prefix";
+        }
+        description
+          "The IPv4 address and prefix length in CIDR notation";
+      }
+
+      container config {
+        description
+          "Configuration data ";
+
+        uses ipv4-config;
+      }
+
+      container state {
+        config false;
+
+        description
+          "Operational state data ";
+
+        uses ipv4-config;
+        uses ai-state;
+      }
+    }
+	}
+
+	grouping ipv4-config {
+		description
+		  "Grouping for subinterface config";
+		
+    leaf ip-prefix {
+      type ndda-common:ipv4-prefix-with-host-bits;
+      description
+        "The IPv4 address and prefix length in CIDR notation";
+    }
+
+    leaf ip-address {
+      type ndda-common:ipv4-address;
+      description
+        "The IPv4 address";
+    }
+
+    leaf prefix-length {
+      type uint32;
+      description
+        "The prefix length";
+    }
+
+    leaf ip-cidr {
+      type ndda-common:ipv4-prefix-with-host-bits;
+      description
+        "The IPv4 net and prefix length in CIDR notation";
+    }
+	}
+
+  grouping ipv6-top {
+		description
+		  "Top-level grouping ipv6 address info";
+
+    list ipv6 {
+      key "ip-prefix";
+			max-elements 64;
+      description
+        "The list of IPv6 addresses assigned to the subinterface.";
+
+      leaf ip-prefix {
+        type leafref {
+          path "../config/ip-prefix";
+        }
+        description
+          "The IPv6 address and prefix length in CIDR notation";
+      }
+
+      container config {
+        description
+          "Configuration data ";
+
+        uses ipv6-config;
+      }
+
+      container state {
+        config false;
+
+        description
+          "Operational state data ";
+
+        uses ipv6-config;
+        uses ai-state;
+      }
+    }
+	}
+
+	grouping ipv6-config {
+		description
+		  "Grouping for subinterface config";
+		
+    leaf ip-prefix {
+      type ndda-common:ipv6-prefix-with-host-bits;
+      description
+        "The IPv6 address and prefix length in CIDR notation";
+    }
+
+    leaf ip-address {
+      type ndda-common:ipv6-address;
+      description
+        "The IPv6 address";
+    }
+
+    leaf prefix-length {
+      type uint32;
+      description
+        "The prefix length";
+    }
+
+    leaf ip-cidr {
+      type ndda-common:ipv6-prefix-with-host-bits;
+      description
+        "The IPv6 net and prefix length in CIDR notation";
+    }
+	}
+
+	grouping ai-state {
+		description
+		  "Grouping for subinterface state";
+		
+		leaf status {
+			type ndda-common:oper-state;
+			description
+				"The status of the ip resource";
+		}
+
+		leaf reason {
+			type string;
+			description
+				"The reason why a resource is in a certain status";
+		}
+
+		container statistics {
+			description
+		  	"Top-level container address statistics";
+
+			uses ai-statistics;
+		}
+	}
+
+	grouping ai-statistics {
+		description
+		  "Grouping for address statistics";
+		
+	}
+}

@@ -1,0 +1,172 @@
+module ndda-interface {
+  yang-version 1.1;
+  namespace "urn:ndda/interface";
+  prefix ndda-if;
+
+	// import
+	import ndda-common {
+    prefix ndda-common;
+  }
+
+	// contact
+	import ndda-if-subinterface {
+    prefix ndda-if-si;
+  }
+
+	// contact
+	organization "NDD";
+
+  contact
+    "NDD Support Web: <http://www.yndd.com>";
+
+	// description
+  description
+    "Model that describes a interface";
+
+  revision 2022-01-01 {
+    description
+      "ndda 0.1.1";
+		reference "<http://www.yndd.com>";
+  }
+
+  grouping interface-top {
+		description
+		  "Top-level grouping interface";
+		
+		list interface {
+			key "name";
+			description
+			  "the list of interface";
+
+			leaf name {
+				type leafref {
+					path "../config/name";
+				}
+				description
+					"The name of the interface";
+			}
+			
+			container config {
+				description
+					"Configuration data ";
+
+				uses interface-config;
+			}
+
+			container state {
+				config false;
+
+				description
+					"Operational state data ";
+
+				uses interface-config;
+				uses interface-state;
+			}
+			uses ndda-if-si:subinterface-top;
+			
+		}
+	}
+
+	grouping interface-config {
+		description
+		  "Grouping for interface config";
+		
+		leaf name {
+      type ndda-common:name;
+      description
+				"The name of the interface";
+		}
+
+		leaf kind {
+			type ndda-common:interface-kind;
+			description
+				"The kind of the device";
+		}
+
+		leaf lag {
+			type boolean;
+			description
+				"The interface is a lag";
+		}
+
+		leaf lag-member {
+			type boolean;
+			description
+				"The interface is a lag member";
+		}
+
+		leaf lag-name {
+			type ndda-common:name;
+			description
+				"The lag-name valid for member links";
+		}
+
+		leaf lacp {
+			type boolean;
+			description
+				"Lacp enabled on the lag";
+		}
+
+		leaf lacp-fallback {
+			type boolean;
+			description
+				"Lacp fallback enabled on the lag";
+		}	
+	}
+
+	grouping interface-state {
+		description
+		  "Grouping for interface state";
+		
+		leaf status {
+			type ndda-common:oper-state;
+			description
+				"The status of the ip resource";
+		}
+
+		leaf reason {
+			type string;
+			description
+				"The reason why a resource is in a certain status";
+		}
+
+		container statistics {
+			description
+		  	"Top-level container platform statistics";
+
+			uses interface-statistics;
+		}
+	}
+
+	grouping interface-statistics {
+		description
+		  "Grouping for interface statistics";
+		
+		leaf in-octets {
+        type ndda-common:zero-based-counter64;
+         description
+          "in-octets";
+      }
+      
+		leaf in-unicast-packets {
+			type ndda-common:zero-based-counter64;
+			description
+				"in-unicast-packets";
+		}
+
+		leaf out-octets {
+			type ndda-common:zero-based-counter64;
+			description
+				"out-octets";
+		}
+
+		leaf out-unicast-packets {
+			type ndda-common:zero-based-counter64;
+			description
+				"out-octets";
+		}
+	}
+
+	uses interface-top;
+
+}
